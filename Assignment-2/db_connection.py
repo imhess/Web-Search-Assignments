@@ -10,19 +10,39 @@
 # standard arrays
 
 #importing some Python libraries
-# --> add your Python code here
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 def connectDataBase():
 
     # Create a database connection object using psycopg2
-    # --> add your Python code here
+    DB_NAME = "corpus"
+    DB_USER = "postgres"
+    DB_PASS = "012202"
+    DB_HOST = "localhost"
+    DB_PORT = "5432"
 
-def createCategory(cur, cur, catId, catName):
+    try:
+        conn = psycopg2.connect(database=DB_NAME,
+        user=DB_USER,
+        password=DB_PASS,
+        host=DB_HOST,
+        port=DB_PORT,
+        cursor_factory=RealDictCursor)
+        return conn
+    except:
+        print("Database not connected successfully")
+
+def createCategory(cur, catId, catName):
 
     # Insert a category in the database
     # --> add your Python code here
+    sql = "Insert into category (catId, catName) Values (%s, %s)"
 
-def createDocument(cur, docId, docText, docTitle, docDate, docCat):
+    catSet = [catId, catName]
+    cur.execute(sql, catSet)
+
+#def createDocument(cur, docId, docText, docTitle, docDate, docCat):
 
     # 1 Get the category id based on the informed category name
     # --> add your Python code here
@@ -42,7 +62,7 @@ def createDocument(cur, docId, docText, docTitle, docDate, docCat):
     # 4.3 Insert the term and its corresponding count into the database
     # --> add your Python code here
 
-def deleteDocument(cur, docId):
+#def deleteDocument(cur, docId):
 
     # 1 Query the index based on the document to identify terms
     # 1.1 For each term identified, delete its occurrences in the index for that document
@@ -52,7 +72,7 @@ def deleteDocument(cur, docId):
     # 2 Delete the document from the database
     # --> add your Python code here
 
-def updateDocument(cur, docId, docText, docTitle, docDate, docCat):
+#def updateDocument(cur, docId, docText, docTitle, docDate, docCat):
 
     # 1 Delete the document
     # --> add your Python code here
@@ -60,7 +80,7 @@ def updateDocument(cur, docId, docText, docTitle, docDate, docCat):
     # 2 Create the document with the same id
     # --> add your Python code here
 
-def getIndex(cur):
+#def getIndex(cur):
 
     # Query the database to return the documents where each term occurs with their corresponding count. Output example:
     # {'baseball':'Exercise:1','summer':'Exercise:1,California:1,Arizona:1','months':'Exercise:1,Discovery:3'}
