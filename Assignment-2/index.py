@@ -1,7 +1,8 @@
 #-------------------------------------------------------------------------
-# AUTHOR: your name
-# FILENAME: title of the source file
-# SPECIFICATION: description of the program
+# AUTHOR: Isaiah Hessler
+# FILENAME: Assignment-2, index.py
+# SPECIFICATION: Complete the Python program (db_connection.py) that will use the corpus database tables
+# created in question 1 to manage an inverted index.
 # FOR: CS 4250- Assignment #2
 # TIME SPENT: how long it took you to complete the assignment
 #-----------------------------------------------------------*/
