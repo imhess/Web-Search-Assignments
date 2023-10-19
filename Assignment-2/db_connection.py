@@ -4,7 +4,7 @@
 # SPECIFICATION: Complete the Python program (db_connection.py) that will use the corpus database tables
 # created in question 1 to manage an inverted index.
 # FOR: CS 4250- Assignment #1
-# TIME SPENT: how long it took you to complete the assignment
+# TIME SPENT: 12 Hours +
 #-----------------------------------------------------------*/
 
 #IMPORTANT NOTE: DO NOT USE ANY ADVANCED PYTHON LIBRARY TO COMPLETE THIS CODE SUCH AS numpy OR pandas. You have to work here only with
@@ -49,7 +49,6 @@ def createDocument(cur, docId, docText, docTitle, docDate, docCat):
     cur.execute(sql, catname)
     value = cur.fetchall()
     category_id = value[0]['catid']
-    print(value[0]['catid'])
 
 
     # 2 Insert the document in the database. For num_chars, discard the spaces and punctuation marks.
@@ -70,12 +69,10 @@ def createDocument(cur, docId, docText, docTitle, docDate, docCat):
             x = docText.replace(i, '')
             docText = x
     docText = docText.lower()
-    print(docText)
     terms = []
     terms = docText.split(" ")
     terms = list(set(terms))
     terms.sort()
-    print(terms)
 
     # 3.2 For each term identified, check if the term already exists in the database
     # 3.3 In case the term does not exist, insert it into the database
@@ -115,33 +112,68 @@ def deleteDocument(cur, docId):
 
     # 1 Query the index based on the document to identify terms
     # 1.1 For each term identified, delete its occurrences in the index for that document
+    # 1.2 Check if there are no more occurrences of the term in another document. If this happens, delete the term from the database.
     counter = 0
     sql = "Select countterm from term_count where countdoc = %s"
     document_id = [docId]
     cur.execute(sql, document_id)
     term_list = cur.fetchall()
     for term in term_list:
-        print(term_list[counter]['countterm'])
+        current_term = term_list[counter]['countterm']
+        sql = "Delete from term_count where countdoc = %s and countterm = %s"
+        deleteset = [docId, current_term]
+        cur.execute(sql, deleteset)
+
+        sql = "Select * from term_count where countterm = %s"
+        select_term = [current_term]
+        cur.execute(sql, select_term)
+        result = cur.fetchall()
+        if not result:
+            sql = "Delete from terms where term = %s"
+            delete_term = [current_term]
+            cur.execute(sql, delete_term)
         counter += 1
-    # 1.2 Check if there are no more occurrences of the term in another document. If this happens, delete the term from the database.
-    # --> add your Python code here
 
     # 2 Delete the document from the database
-    # --> add your Python code here
+    sql = "Delete from documents where docid = %s"
+    delete_doc = [docId]
+    cur.execute(sql, delete_doc)
 
-#def updateDocument(cur, docId, docText, docTitle, docDate, docCat):
+def updateDocument(cur, docId, docText, docTitle, docDate, docCat):
 
     #sql = "Update documents set docid = %s, doctext = %s, doctitle = %s, numchars = %s, docdate = %s, doccat = %s"
 
     # 1 Delete the document
-    # --> add your Python code here
+    deleteDocument(cur, docId)
 
     # 2 Create the document with the same id
-    # --> add your Python code here
+    createDocument(cur, docId, docText, docTitle, docDate, docCat)
 
-#def getIndex(cur):
+def getIndex(cur):
 
-    # Query the database to return the documents where each term occurs with their corresponding count. Output example:
-    # {'baseball':'Exercise:1','summer':'Exercise:1,California:1,Arizona:1','months':'Exercise:1,Discovery:3'}
-    # ...
-    # --> add your Python code here
+    # Query the database to return the documents where each term occurs with their corresponding count.
+    counter_terms = 0
+    counter_docs = 0
+    sql = "Select term from terms"
+    cur.execute(sql)
+    results = cur.fetchall()
+    for term in results:
+        current_term = results[counter_terms]['term']
+        sql = "Select * from term_count where countterm = %s"
+        find_term = [current_term]
+        cur.execute(sql, find_term)
+        count_list = cur.fetchall()
+        print(f'{current_term}:')
+        for row in count_list:
+            current_document = count_list[counter_docs]['countdoc']
+            current_count = count_list[counter_docs]['count']
+            sql = "Select doctitle from documents where docid = %s"
+            find_document = [current_document]
+            cur.execute(sql, find_document)
+            doc_list = cur.fetchall()
+            current_doc_title = doc_list[0]['doctitle']
+            print(f'{current_doc_title}: {current_count}')
+            counter_docs += 1
+        print(' ')
+        counter_terms += 1
+        counter_docs = 0

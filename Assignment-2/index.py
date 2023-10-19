@@ -4,7 +4,7 @@
 # SPECIFICATION: Complete the Python program (db_connection.py) that will use the corpus database tables
 # created in question 1 to manage an inverted index.
 # FOR: CS 4250- Assignment #2
-# TIME SPENT: how long it took you to complete the assignment
+# TIME SPENT: 12 Hours +
 #-----------------------------------------------------------*/
 
 #importing some Python libraries
@@ -75,8 +75,7 @@ if __name__ == '__main__':
 
           elif (option == "e"):
 
-              index = getIndex(cur)
-              print(index)
+              getIndex(cur)
 
           elif (option == "q"):
 
