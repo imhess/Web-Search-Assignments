@@ -1,13 +1,14 @@
 #-------------------------------------------------------------------------
-# AUTHOR: your name
-# FILENAME: title of the source file
-# SPECIFICATION: description of the program
+# AUTHOR: Isaiah Hessler
+# FILENAME: index_mongo.py
+# SPECIFICATION: complete the Python program (db_connection_mongo.py) by using
+# PyMongo. Requirements: 1) use the driver program index_mongo.py to trigger the operations
 # FOR: CS 4250- Assignment #2
-# TIME SPENT: how long it took you to complete the assignment
+# TIME SPENT: 5 hours
 #-----------------------------------------------------------*/
 
 from pymongo import MongoClient  # import mongo client to connect
-from db_connection_mongo_solution import *
+from db_connection_mongo import *
 
 if __name__ == '__main__':
 
