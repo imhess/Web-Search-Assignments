@@ -8,7 +8,7 @@
 #-----------------------------------------------------------*/
 
 from pymongo import MongoClient  # import mongo client to connect
-from db_connection_mongo import *
+from db_connection_mongo_solution import *
 
 if __name__ == '__main__':
 

@@ -18,23 +18,50 @@ def connectDataBase():
     # Create a database connection object using pymongo
     client = MongoClient("mongodb://localhost:27017/")
     db = client["corpus"]
-    collection = db["documents"]
+    return db
 
 
-#def createDocument(col, docId, docText, docTitle, docDate, docCat):
+def createDocument(col, docId, docText, docTitle, docDate, docCat):
 
     # create a dictionary to count how many times each term appears in the document.
     # Use space " " as the delimiter character for terms and remember to lowercase them.
-    # --> add your Python code here
-
     # create a list of dictionaries to include term objects.
-    # --> add your Python code here
+    ogText = docText
+    total_length = 0
+    punctuation = {'.', ',', '!', '?', ':', ';', '[', ']', '(', ')', '{', '}', '/', '\\'}
+    for j in range(len(ogText)):
+        for i in punctuation:
+            x = ogText.replace(i, '')
+            ogText = x
+    print(ogText)
+
+    terms = {}
+    term_list = ogText.split()
+
+    for word in term_list:
+        term = word.lower()
+        total_length += len(term)
+        if term in terms:
+            terms[term]['count'] += 1
+        else:
+            terms[term] = {'count': 1, 'num_chars': len(term)}
 
     #Producing a final document as a dictionary including all the required document fields
-    # --> add your Python code here
+    document = {
+        "_id": docId,
+        "doctitle": docTitle,
+        "doctext": docText,
+        "num_chars": total_length,
+        "docdate": docDate,
+        "category": docCat,
+        "terms:": terms
+    }
+
+    print(document)
+
 
     # Insert the document
-    # --> add your Python code here
+    col.insert_one(document)
 
 #def deleteDocument(col, docId):
 
