@@ -63,7 +63,6 @@ if __name__ == '__main__':
           elif (option == "e"):
 
               index = getIndex(documents)
-              print(index)
 
           elif (option == "q"):
 

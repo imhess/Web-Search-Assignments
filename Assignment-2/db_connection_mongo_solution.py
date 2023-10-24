@@ -54,7 +54,7 @@ def createDocument(col, docId, docText, docTitle, docDate, docCat):
         "num_chars": total_length,
         "docdate": docDate,
         "category": docCat,
-        "terms:": terms
+        "terms": terms
     }
 
     print(document)
@@ -63,22 +63,31 @@ def createDocument(col, docId, docText, docTitle, docDate, docCat):
     # Insert the document
     col.insert_one(document)
 
-#def deleteDocument(col, docId):
+def deleteDocument(col, docId):
 
     # Delete the document from the database
-    # --> add your Python code here
+    col.delete_one({"_id": docId})
 
-#def updateDocument(col, docId, docText, docTitle, docDate, docCat):
+def updateDocument(col, docId, docText, docTitle, docDate, docCat):
 
     # Delete the document
-    # --> add your Python code here
+    col.delete_one({"_id": docId})
 
     # Create the document with the same id
-    # --> add your Python code here
+    createDocument(col, docId, docText, docTitle, docDate, docCat)
 
-#def getIndex(col):
+def getIndex(col):
 
-    # Query the database to return the documents where each term occurs with their corresponding count. Output example:
-    # {'baseball':'Exercise:1','summer':'Exercise:1,California:1,Arizona:1','months':'Exercise:1,Discovery:3'}
-    # ...
-    # --> add your Python code here
+    # Query the database to return the documents where each term occurs with their corresponding count.
+    term_counts = {}
+
+    for doc in col.find():
+        title = doc["doctitle"]
+        for term, term_data in doc.get("terms", {}).items():
+            count = term_data.get("count", 0)
+            if term in term_counts:
+                term_counts[term] += f", {title}: {count}"
+            else:
+                term_counts[term] = f"{title}: {count}"
+    for term, counts in term_counts.items():
+        print(f"{term}: {counts}")
