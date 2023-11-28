@@ -15,17 +15,16 @@ def search_for_page(url, target):
         html = urlopen(url)
         page = html.read()
         bs = BeautifulSoup(page, 'html.parser')
+        html_data = page.decode('utf-8')
 
         if bs.find('h1', {'class':'cpp-h1'}, string=target):
             print(" ")
             print(f"Page found. {url}")
             return True
-        
-        title = bs.title.text
 
         crawled_urls.add(url)
 
-        store({"_id": url, "title": title})
+        store({"_id": url, "html": html_data})
 
         next_link = bs.find_all('a')
         if next_link:
@@ -44,10 +43,7 @@ def store(data):
     client = MongoClient('mongodb://localhost:27017/')
     db = client['crawler']
     collection = db['pages']
-    if collection.find({"_id": data['_id']}):
-        return
-    else:
-        collection.insert_one(data)
+    collection.update_one({'_id': data['_id']}, {'$set': data}, upsert=True)
     client.close()
 
 search_for_page(frontier, target)
