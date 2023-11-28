@@ -1,3 +1,12 @@
+#-------------------------------------------------------------------------
+# AUTHOR: Isaiah Hessler
+# FILENAME: crawler.py
+# SPECIFICATION: Write a Python program (crawler.py) that will crawl the CS website until the Permanent
+# Faculty (they are 16 in total) page is found. The target URL is https://www.cpp.edu/sci/computer-science/faculty-and-staff/permanent-faculty.shtml.
+# FOR: CS 4250- Assignment #3
+# TIME SPENT: 5 hours
+#-----------------------------------------------------------*/
+
 from urllib.request import urlopen
 from urllib.parse import urljoin
 from pymongo import MongoClient
@@ -20,6 +29,7 @@ def search_for_page(url, target):
         if bs.find('h1', {'class':'cpp-h1'}, string=target):
             print(" ")
             print(f"Page found. {url}")
+            store({"_id": url, "html": html_data})
             return True
 
         crawled_urls.add(url)
