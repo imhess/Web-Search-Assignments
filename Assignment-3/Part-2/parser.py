@@ -5,7 +5,7 @@
 # will read the CS faculty information, parse faculty members name, title, office, email, and website, and
 # persist this data in MongoDB.
 # FOR: CS 4250- Assignment #3
-# TIME SPENT: 5 hours
+# TIME SPENT: 8 hours
 #-----------------------------------------------------------*/
 from pymongo import MongoClient
 from bs4 import BeautifulSoup
