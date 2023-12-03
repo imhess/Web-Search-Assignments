@@ -26,13 +26,10 @@ def parse_page():
 
     divs = bs.find_all('div', class_="clearfix")
 
-    #name, title, office, email, and website
     attributeList = []
     id_counter = 0
     for div in divs:
         counter = 0
-        #print(div.find_all("p"))
-        #div_id = counter
         for x in div.find_all(string=re.compile(r"^[A-Z]")):
             flag = False
             y = x.find_next(string=lambda t: "" in t.text)
